@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tit Tac Game</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<style type="text/css">
+	tr td{
+		background:black;
+		margin: 5px;
+	}
+	.firstplayer{
+		background:red;
+	}
+	.secondplayer{
+		background: blue;
+	}
+</style>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+	<div class="jumbotron" style="text-align: center;">
+
+	    <h1 style="color: black">Tic-Tac-Toe Game</h1>
+        </div>
+<div class="container login" id="login">
+        <div class="row" >
+        <div class="jumbotron" style="text-align: center; background-color: #2F4F4F">
+        	<br><br>
+	    <div class="jumbotron" style="text-align: center; width: 50%;display: inline-block">
+	    <div class="row" >
+
+	    	<div class="form-group">
+	    		<div class="col-md-6">
+	    		<label>First Player:</label> <span class="required text-danger fplayer" id="fplayer"> <b> Required</b></span>
+	    		</div>
+	    		<div class="col-md-6">
+	    		<input type="text" id="first_player" class="form-control">
+	    		</div>
+	    	</div>
+
+	    	<div class="form-group">
+	    		<div class="col-md-6">
+	    		<label>Second Player:</label><span class="required text-danger splayer" id="splayer"> <b> Required</b></span>
+	    		</div>
+	    		<div class="col-md-6">
+	    		<input type="text" id="second_player" class="form-control">
+	    		</div>
+	    	</div>
+	    </div>
+	    <br>
+	    	<button class="btn btn-primary" onclick="getPlayerName();">Start Game</button>
+        </div>
+        </div>
+        </div>
+
+</div>	
+<div class="container game" id="game">
+	<div class="row">
+		<div class="col-md-6" id="gameBox">
+				<table height="300" width="30%" class="table table-bordered">
+		<tr >
+			<td class="tile" id="0"><div  id="f1"></td>
+				<td class="tile" id="1"><div  id="f2"></td>
+					<td class="tile" id="2"><div  id="f3"></td>
+					</tr>
+					<tr >
+						<td class="tile" id="3"><div  id="f4"></td>
+							<td class="tile" id="4"><div  id="f5"></td>
+								<td class="tile" id="5"><div  id="f6"></td>
+								</tr>
+								<tr >
+									<td class="tile" id="6"><div  id="f7"></td>
+										<td class="tile" id="7"><div  id="f8"></td>
+											<td class="tile" id="8"><div  id="f9"></td>
+											</tr>
+										</table>
+		</div>
+		<div class="col-md-6">
+			<div class="jumbotron" style="text-align: center; background-color: #2F4F4F;height: 300px">
+			<div class="jumbotron" style="text-align: center; width: 70%;display: inline-block">
+	    <div class="row" >
+
+	    	<div class="form-group">
+	    		<p>1st: <span id="fst"></span>&nbsp;2nd: <span id="scnd"></span></p>
+	    		<p id="aplayer"></p>
+	    	</div>
+	    </div>
+	    <br>
+	    	<button class="btn btn-primary pull-right" id="playAgain">PlayAgain</button>
+	    	<button class="btn btn-danger pull-left" id="resetGame">Reset</button>
+        </div>	
+				
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+     
+     hideElement("required");
+     hideElement("game");
+
+	});
+	var isActivePlayer=0;
+	var gameState = [2,2,2,2,2,2,2,2,2];
+	var winningProbability = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[2,4,6],[0,4,8]];
+
+	function hideElement(element)
+	{
+		$('.'+element).hide();
+	}
+	function showElement(element)
+	{
+		$('.'+element).show();
+	}
+	function getPlayerName() {
+
+    var firstplayer = $("#first_player").val();
+
+    var secondplayer = $("#second_player").val();
+    console.log("f:"+firstplayer+" s:"+secondplayer);
+    if(firstplayer === "")
+    {
+     showElement("fplayer");
+    }
+     if(secondplayer === "")
+    {
+     showElement("splayer");
+    }
+    if(firstplayer != "" && secondplayer != ""){
+     showElement("game");
+     $('#fst').text(firstplayer);
+     $('#scnd').text(secondplayer);
+     hideElement("login");
+    }
+	}
+	$('#playAgain').click(function(){
+          location.reload();
+
+		});
+
+	function checkresult(player){
+
+          
+          if(player == 0){
+          	firstplayer = $("#first_player").val();
+            $('#aplayer').text( firstplayer+' Wins'); 
+          }else{
+          	secondplayer = $("#second_player").val();
+            $('#aplayer').text(secondplayer+' Wins'); 
+
+          }
+          $('#gameBox').hide();
+
+        }
+        function activePlayer(player){
+        	if(player == 0){
+        			firstplayer = $("#first_player").val();
+            $('#aplayer').text(firstplayer+' Turn'); 
+          }else{
+          		secondplayer = $("#second_player").val();
+            $('#aplayer').text(secondplayer+' Turn'); 
+
+          }
+        }
+        $('td').click(function() {
+         var tag=$(this).attr('id');
+         // console.log(tag);
+			if(gameState[tag] == 2){
+			 if (isActivePlayer == 0){
+
+				$(this).toggleClass('firstplayer');
+				gameState[tag] = isActivePlayer;
+			
+				isActivePlayer =1;
+			}
+			else{
+
+				$(this).toggleClass('secondplayer');
+				gameState[tag] = isActivePlayer;
+				isActivePlayer =0;
+
+
+			}
+		      activePlayer(isActivePlayer);
+		    for (var i = 0; i <= winningProbability.length; i++) {
+		    	
+		    	var p1 = winningProbability[i][0];
+		    	var p2 = winningProbability[i][1];
+		    	var p3 = winningProbability[i][2];
+
+            	if(gameState[p1] == gameState[p2]  && gameState[p2]  == gameState[p3] && gameState[p1] != 2){
+            		
+            		console.log("wp: [" + p1+","+p2+","+ p3+"]");
+            		console.log("GS: [" + gameState[p1]+","+gameState[p2]+","+gameState[ p3]+"]");
+            		checkresult(gameState[p1]);
+            	}
+            }
+            
+			console.log(gameState);
+            	
+			}
+		});
+		$('#resetGame').click(function(){
+		
+         isActivePlayer=0;
+         gameState = [2,2,2,2,2,2,2,2,2];
+         activePlayer(isActivePlayer);
+         for (var i = 0; i >= 8; i++) {
+         $('#'+i).removeClass('secondplayer');
+         $('#'+i).removeClass('firstplayer');
+         }
+		});
+</script>
+
+</body>
+</html>
